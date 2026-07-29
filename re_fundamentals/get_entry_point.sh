@@ -8,13 +8,13 @@ fi
 file_name="$1"
 
 if ! readelf -h "$file_name" &>/dev/null; then
-    echo "Xəta: '$file_name' faylı etibarlı ELF faylı deyil." >&2
+    echo "Xəta: '$file_name' etibarlı ELF faylı deyil." >&2
     exit 1
 fi
 
 magic_number=$(readelf -h "$file_name" | grep "Magic:" | sed 's/^[[:space:]]*Magic:[[:space:]]*//')
 class=$(readelf -h "$file_name" | grep "Class:" | awk '{print $2}')
-byte_order=$(readelf -h "$file_name" | grep "Data:" | sed 's/^[[:space:]]*Data:[[:space:]]*//')
+byte_order=$(readelf -h "$file_name" | grep "Data:" | sed 's/.*, //' | sed 's/^[[:space:]]*//')
 entry_point_address=$(readelf -h "$file_name" | grep "Entry point address:" | awk '{print $4}')
 
 if [ -f "./messages.sh" ]; then
